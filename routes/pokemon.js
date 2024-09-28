@@ -4,8 +4,20 @@ const db = require('../config/database');
 const  pk  = require("../pokedex.json").pokemon;
 
   
-  pokemon.post("/",(req,res,next) => {
-      return res.status(200).send(req.body);
+  pokemon.post("/",async (req,res,next) => {
+    const { pok_name, pok_height, pok_weight, pok_base_experience} = req.body;
+    if(pok_name && pok_height && pok_weight && pok_base_experience){
+      let query  = "INSERT INTO pokemon(pok_name, pok_height, pok_weight, pok_base_experience)";
+      query+= ` VALUES ('${pok_name}', ${pok_height}, ${pok_weight},${pok_base_experience})`;
+      const rows = await db.query(query);
+      console.log(rows);
+      if(rows.affectedRows == 1){
+        return res.status(201).json({code: 201, message: "Pokemon insertado correctamente"});
+    }
+        return res.status(500).json({code: 500, message: "Ocurrrio un error"});
+    }
+    return res.status(500).json({code: 500, message: "Campos incompletos"});
+    
   });
   
   pokemon.get("/", async(req, res, next) => {
@@ -18,7 +30,7 @@ const  pk  = require("../pokedex.json").pokemon;
     const pkmn = await db.query('SELECT * FROM pokemon WHERE pok_id = ?',[id]);
     //console.log(pkmn);
    if(id >= 1 && id <= 722){
-      return res.status(200).json({code: 1, message: pkmn});
+      return res.status(200).json({code: 200, message: pkmn});
     }
       return res.status(404).json({code: 404, message: "Pokemon no encontrado"});
   
@@ -27,7 +39,7 @@ const  pk  = require("../pokedex.json").pokemon;
     const name = req.params.name;
     const pkmn = await db.query('SELECT * FROM pokemon WHERE pok_name = ?', [name]);  
     if(pkmn.length > 0) {
-       return  res.status(200).json({code: 1, message: pkmn});
+       return  res.status(200).json({code: 200, message: pkmn});
       }
         return res.status(404).json({code: 404, message: "Pokemon no encontrado"});
     
