@@ -20,7 +20,7 @@ const  pk  = require("../pokedex.json").pokemon;
    if(id >= 1 && id <= 722){
       return res.status(200).json({code: 1, message: pkmn});
     }
-      return res.status(404).json({coee: 404, message: "Pokemon no encontrado"});
+      return res.status(404).json({code: 404, message: "Pokemon no encontrado"});
   
   });
   pokemon.get("/:name([A-Za-z]+)", async (req, res, next) => {
