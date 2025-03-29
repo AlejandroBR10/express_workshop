@@ -3,10 +3,13 @@ const morgan = require('morgan');
 const express = require("express");
 const app = express();
 //Routers
-const pokemon = require('./routes/pokemon');
-const user = require('./routes/user');
+
+const mediciones = require('./routes/mediciones');
+const sensores = require('./routes/sensores');
+const riego = require('./routes/riego');
+const alertas = require('./routes/alertas');
 //Middleware
-const auth = require('./middleware/auth')
+
 const notFound = require('./middleware/notFound');
 const index = require('./middleware/index')
 const jsonwebtoken = require('jsonwebtoken');
@@ -28,9 +31,12 @@ DELETE - borrar un recurso
 */
 
 app.get("/", index );
-app.use("/user", user);
-app.use(auth);
-app.use("/pokemon", pokemon);
+app.use("/mediciones", mediciones);
+app.use("/sensores", sensores);
+app.use("/riego", riego);
+app.use("/alertas", alertas);
+
+
 
 app.use(notFound);
 
